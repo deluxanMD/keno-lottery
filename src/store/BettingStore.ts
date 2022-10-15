@@ -7,6 +7,7 @@ export type BettingStoreType = {
 };
 
 export class BettingStore {
+  betAmount: number = 0;
   numbers: BettingStoreType[] = [
     {
       id: '1',
@@ -447,5 +448,9 @@ export class BettingStore {
 
       return number;
     });
+  };
+
+  setBetAmount = (amount: number) => {
+    this.betAmount = amount;
   };
 }

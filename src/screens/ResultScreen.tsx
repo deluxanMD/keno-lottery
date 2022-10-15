@@ -5,7 +5,9 @@ import {View, StyleSheet} from 'react-native';
 const ResultScreen = () => {
   return (
     <View style={styles.container}>
-      <Text h2>Hello World</Text>
+      <Text h2 style={{textAlign: 'center'}}>
+        Bet successfully placed
+      </Text>
     </View>
   );
 };
@@ -15,6 +17,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 15,
   },
 });
 

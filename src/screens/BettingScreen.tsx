@@ -19,7 +19,7 @@ type BettingScreenType = {
 
 const BettingScreen = observer(({navigation}: BettingScreenType) => {
   const {
-    betting: {numbers, toggleNumber, reset, selectRandom},
+    betting: {numbers, toggleNumber, reset, selectRandom, setBetAmount},
   } = useStore();
 
   const [value, setValue] = useState<string>('');
@@ -48,7 +48,10 @@ const BettingScreen = observer(({navigation}: BettingScreenType) => {
   };
 
   const handleBet = () => {
+    setBetAmount(parseFloat(value));
     navigation.navigate('Result');
+    setValue('');
+    reset();
   };
 
   const renderItem = ({item}) => {

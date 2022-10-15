@@ -7,13 +7,17 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {Header, Button} from '@rneui/themed';
+import {Button} from '@rneui/themed';
 import {useStore} from '../store';
 import {BettingStoreType} from '../store/BettingStore';
 import {observer} from 'mobx-react-lite';
 import {alertWithSingleButton} from '../components/CustomAlert';
 
-const BettingScreen = observer(() => {
+type BettingScreenType = {
+  navigation: any;
+};
+
+const BettingScreen = observer(({navigation}: BettingScreenType) => {
   const {
     betting: {numbers, toggleNumber, reset, selectRandom},
   } = useStore();
@@ -43,7 +47,9 @@ const BettingScreen = observer(() => {
     selectRandom();
   };
 
-  const handleBet = () => {};
+  const handleBet = () => {
+    navigation.navigate('Result');
+  };
 
   const renderItem = ({item}) => {
     return (
@@ -61,18 +67,14 @@ const BettingScreen = observer(() => {
 
   return (
     <View style={styles.container}>
-      <Header
-        rightComponent={
-          <Button
-            size="sm"
-            title="EP"
-            type="solid"
-            color="error"
-            onPress={handleEasyPick}
-          />
-        }
-        centerComponent={{text: 'Keno Lottery'}}
-      />
+      <View style={styles.betContainer}>
+        <Button
+          size="sm"
+          title="Easy Pick"
+          style={styles.btnStyle}
+          onPress={handleEasyPick}
+        />
+      </View>
       <FlatList
         keyExtractor={item => item.id}
         data={numbers}
@@ -179,6 +181,11 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     borderWidth: 1,
     padding: 5,
+  },
+  easyPickBtn: {
+    marginTop: 10,
+    alignItems: 'flex-end',
+    textAlign: 'right',
   },
 });
 

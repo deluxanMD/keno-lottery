@@ -1,9 +1,17 @@
 import React, {useState} from 'react';
-import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
-import {Header, Input, Button} from '@rneui/themed';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
+import {Header, Button} from '@rneui/themed';
 import {useStore} from '../store';
 import {BettingStoreType} from '../store/BettingStore';
 import {observer} from 'mobx-react-lite';
+import {alertWithSingleButton} from '../components/CustomAlert';
 
 const BettingScreen = observer(() => {
   const {
@@ -15,15 +23,22 @@ const BettingScreen = observer(() => {
   const handlePress = (item: BettingStoreType) => {
     const isExceed: boolean =
       numbers.filter(number => number.selected === true).length > 4;
-    if (isExceed) {
+    if (isExceed && !item.selected) {
+      alertWithSingleButton(
+        'Alert',
+        "You can't select more than 5 numbers",
+        'Dismiss',
+      );
       return;
     }
     toggleNumber(item.id);
   };
 
   const handleStakeInput = (amount: string) => {
-    setValue(amount);
+    setValue(amount.replace(/[^0-9]/g, ''));
   };
+
+  const handleBet = () => {};
 
   const renderItem = ({item}) => {
     return (
@@ -42,11 +57,15 @@ const BettingScreen = observer(() => {
   return (
     <View style={styles.container}>
       <Header
-        leftComponent={{
-          icon: 'menu',
-          color: '#fff',
-        }}
-        rightComponent={<View></View>}
+        rightComponent={
+          <Button
+            size="sm"
+            title="EP"
+            type="solid"
+            color="error"
+            onPress={() => setValue('500')}
+          />
+        }
         centerComponent={{text: 'Keno Lottery'}}
       />
       <FlatList
@@ -58,45 +77,53 @@ const BettingScreen = observer(() => {
       />
       <View style={styles.btnContainer}>
         <Button
+          size="sm"
           title="$50"
           type="outline"
           style={styles.btn}
           onPress={() => setValue('50')}
         />
         <Button
+          size="sm"
           title="$100"
           type="outline"
           style={styles.btn}
           onPress={() => setValue('100')}
         />
         <Button
+          size="sm"
           title="$200"
           type="outline"
           style={styles.btn}
           onPress={() => setValue('200')}
         />
         <Button
+          size="sm"
           title="$500"
           type="outline"
           style={styles.btn}
           onPress={() => setValue('500')}
         />
         <Button
+          size="sm"
           title="$1000"
           type="outline"
           style={styles.btn}
           onPress={() => setValue('1000')}
         />
-      </View>
-      <View style={styles.inputContainer}>
-        <Input
-          placeholder="Comment"
-          leftIcon={{type: 'font-awesome', name: 'dollar'}}
+        <TextInput
+          style={styles.input}
           onChangeText={handleStakeInput}
           value={value}
-          keyboardType="number-pad"
         />
-        <Button title="BET" />
+      </View>
+      <View style={styles.betContainer}>
+        <Button
+          title="BET"
+          buttonStyle={styles.btnStyle}
+          onPress={handleBet}
+          disabled={value === ''}
+        />
       </View>
     </View>
   );
@@ -105,7 +132,6 @@ const BettingScreen = observer(() => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
   },
   numberBox: {
@@ -120,17 +146,34 @@ const styles = StyleSheet.create({
   btnContainer: {
     marginTop: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
   btn: {
     marginLeft: 2,
     marginRight: 2,
   },
+  betContainer: {
+    alignItems: 'flex-end',
+    marginTop: 10,
+    width: '100%',
+  },
+  btnStyle: {
+    marginRight: 10,
+  },
   inputContainer: {
+    // flex: 1,
     flexDirection: 'row',
+    // justifyContent: 'flex-end',
+    // alignContent: 'flex-end',
     marginHorizontal: 70,
     marginTop: 10,
+  },
+  input: {
+    width: 50,
+    height: 32,
+    marginLeft: 5,
+    borderWidth: 1,
+    padding: 5,
   },
 });
 

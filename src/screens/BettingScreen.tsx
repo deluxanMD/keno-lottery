@@ -15,7 +15,7 @@ import {alertWithSingleButton} from '../components/CustomAlert';
 
 const BettingScreen = observer(() => {
   const {
-    betting: {numbers, toggleNumber},
+    betting: {numbers, toggleNumber, reset, selectRandom},
   } = useStore();
 
   const [value, setValue] = useState<string>('');
@@ -36,6 +36,11 @@ const BettingScreen = observer(() => {
 
   const handleStakeInput = (amount: string) => {
     setValue(amount.replace(/[^0-9]/g, ''));
+  };
+
+  const handleEasyPick = () => {
+    reset();
+    selectRandom();
   };
 
   const handleBet = () => {};
@@ -63,7 +68,7 @@ const BettingScreen = observer(() => {
             title="EP"
             type="solid"
             color="error"
-            onPress={() => setValue('500')}
+            onPress={handleEasyPick}
           />
         }
         centerComponent={{text: 'Keno Lottery'}}

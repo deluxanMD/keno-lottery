@@ -422,4 +422,30 @@ export class BettingStore {
       return number;
     });
   };
+
+  reset = () => {
+    this.numbers = this.numbers.map(number => ({
+      ...number,
+      selected: false,
+    }));
+  };
+
+  selectRandom = () => {
+    const randomNumbers: string[] = [];
+
+    while (randomNumbers.length < 5) {
+      const random = (Math.floor(Math.random() * 80) + 1).toString();
+      if (randomNumbers.indexOf(random) === -1) {
+        randomNumbers.push(random);
+      }
+    }
+
+    this.numbers = this.numbers.map(number => {
+      if (randomNumbers.includes(number.value)) {
+        return {...number, selected: true};
+      }
+
+      return number;
+    });
+  };
 }
